@@ -13,10 +13,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with gene-coverage.  If not, see <https://www.gnu.org/licenses/
-from typing import Generator
+from typing import Generator, List
 
 from pybedtools.bedtool import BedTool
 from vtools.gcoverage import RefRecord
+
+import numpy as np
 
 
 def file_to_refflat_records(filename: str) -> Generator[RefRecord, None, None]:
@@ -32,3 +34,11 @@ def refflat_record_to_bedtool(refflat_record: RefRecord) -> BedTool:
         f"{'+' if refflat_record.forward else '-'}\n")  # strand
         for exon in refflat_record.exons)
     return BedTool("".join(bed_regions), from_string=True)
+
+
+def coverage_array_feature(feature: BedTool, samples: List[BedTool]
+                           ) -> np.ndarray:
+    counts = (pos.count for pos in
+              (feature.coverage(sample, d=True, stream=True)
+               for sample in samples))
+    return np.fromiter(counts, dtype=np.uint16)
