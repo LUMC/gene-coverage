@@ -40,7 +40,7 @@ setup(name="gene-coverage",
       # This pysam version supports vcf and not much changes to the interface
       # after this release.
       # pysam has much less dependencies than cyvcf2
-      install_requires=["pybedtools"],
+      install_requires=["pybedtools", "v-tools"],
       keywords="bioinformatics gene coverage transcript exon",
       url="https://github.com/lumc/gene-coverage",
       author="Leiden University Medical Center",
